@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -43,7 +42,7 @@ fun Navigation(){
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text("Top app bar")
+                    Text("Halifax, Nova Scotia")
                 }
             )
         },
@@ -52,7 +51,7 @@ fun Navigation(){
             {
                 NavigationBarItem(
                     icon = { Icon(imageVector = Icons.Default.Search, contentDescription = "Search") },
-                    label = { Text("Today") },
+                    label = { Text("Weather Now") },
                     selected = selectedIndex == 0,
                     onClick = {
                         selectedIndex = 0
