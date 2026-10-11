@@ -1,36 +1,38 @@
+
 package com.example.weatherapp.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.DividerDefaults
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.weatherapp.R
 import com.example.weatherapp.models.Forecast
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
-fun WeatherDailyScreen(){
-
+fun WeatherDailyScreen() {
     val dailyWeather = listOf(
         Forecast(
-            resourceId = R.drawable.cloud,
+            resourceId = R.drawable.cloud_frog,
             weatherType = "Overcast",
             temperatureHigh = 16,
             temperatureLow = 8,
@@ -38,7 +40,7 @@ fun WeatherDailyScreen(){
             humidity = 78
         ),
         Forecast(
-            resourceId = R.drawable.sm_rain,
+            resourceId = R.drawable.rain_frog,
             weatherType = "Light Rain",
             temperatureHigh = 13,
             temperatureLow = 6,
@@ -48,72 +50,151 @@ fun WeatherDailyScreen(){
             humidity = 87
         ),
         Forecast(
-            resourceId = R.drawable.sun,
+            resourceId = R.drawable.snow_frog,
+            weatherType = "Snow",
+            temperatureHigh = 1,
+            temperatureLow = -7,
+            precipitationChance = 74,
+            precipitationAmount = 5,
+            windSpeed = 24,
+            humidity = 65
+        ),
+        Forecast(
+            resourceId = R.drawable.sunny_frog,
             weatherType = "Sunny",
             temperatureHigh = 21,
             temperatureLow = 16,
             windSpeed = 18,
             humidity = 46
-        ),
+        )
     )
 
-    LazyColumn{
-
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(18.dp)
+    ) {
         itemsIndexed(dailyWeather) { index, weather ->
-            Column(
-                modifier = Modifier.padding(16.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+            val formatter = DateTimeFormatter.ofPattern(
+                "EEEE" //Full weekday name
             )
-            {
-                Text(
-                    text = LocalDate.now().plusDays(index.toLong()).toString(),
-                    style = MaterialTheme.typography.titleMedium
-                )
 
-                Image(
-                    painter = painterResource(id = weather.resourceId),
-                    contentDescription = weather.weatherType,
-                    modifier = Modifier.size(64.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                if (index % 2 == 0) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(150.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
 
-                )
-
-                Text(
-                    text = weather.temperatureHigh.toString() + "°C High " +
-                            weather.temperatureLow.toString() + "°C Low",
-                    style = MaterialTheme.typography.titleLarge
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                FlowRow(
-                    modifier = Modifier.widthIn(200.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(weather.weatherType)
-
-                    if (weather.precipitationAmount != null && weather.precipitationChance != null) {
-                        if (weather.weatherType == "Snow") {
-                            Text(
-                                "Chance of snow " + weather.precipitationChance + "%. Amount " +
-                                        weather.precipitationAmount + "cm."
-                            )
-                        } else {
-                            Text(
-                                "Chance of rain " + weather.precipitationChance + "%. Amount " +
-                                        weather.precipitationAmount + "mm."
-                            )
-                        }
+                        Image(
+                            painter = painterResource(weather.resourceId),
+                            contentDescription = weather.weatherType,
+                            modifier = Modifier
+                                .height(150.dp)
+                                .align(Alignment.Center)
+                        )
                     }
+                    ForecastDetails(
+                        weather = weather,
+                        dateLabel = LocalDate.now().plusDays(index.toLong()).format(formatter),
+                        modifier = Modifier.weight(1f)
+                    )
+                } else {
+                    ForecastDetails(
+                        weather = weather,
+                        dateLabel = LocalDate.now().plusDays(index.toLong()).format(formatter),
+                        modifier = Modifier.weight(1f)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(150.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
 
-                    Text("Maximum winds " + weather.windSpeed + "kph. Humidity " + weather.humidity + "%")
-
+                        Image(
+                            painter = painterResource(weather.resourceId),
+                            contentDescription = weather.weatherType,
+                            modifier = Modifier
+                                .height(150.dp)
+                                .align(Alignment.Center)
+                        )
+                    }
                 }
-
-                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
             }
         }
+    }
+}
 
+@Composable
+private fun ForecastDetails(
+    weather: Forecast,
+    dateLabel: String,
+    modifier: Modifier = Modifier //Deafults to "nothing" but can be passed modifiers (I needed to do this to get weight on the first column,
+                                  //because it wouldn't be seen as a "child" element, as it's the most top level part of this composable, and weight can only be
+                                  //added to "child" elements
+) {
+    Column(
+        modifier = modifier
+            .background(
+                color = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(22.dp)
+            )
+            .padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Text(
+            text = dateLabel,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold,
+        )
+
+        Text(
+            text = weather.weatherType,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "${weather.temperatureHigh}°C",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = " / ${weather.temperatureLow}°C",
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+
+        Spacer(Modifier.height(2.dp))
+
+        if (
+            weather.precipitationChance != null &&
+            weather.precipitationAmount != null
+        ) {
+            Text(
+                text = "Precipitation: ${weather.precipitationChance}%",
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
+        Text(
+            text = "Wind: ${weather.windSpeed} km/h",
+            style = MaterialTheme.typography.bodySmall
+        )
+
+        Text(
+            text = "Humidity: ${weather.humidity}%",
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }

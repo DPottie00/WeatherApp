@@ -20,7 +20,7 @@ import com.example.weatherapp.models.CurrentWeather
 fun WeatherCurrentScreen() {
 
     val weather = CurrentWeather(
-        resourceId = R.drawable.sun,
+        resourceId = R.drawable.sunny_frog,
         weatherType = "Sunny",
         temperatureCurrent = 21,
         temperatureFeelsLike = 16,
@@ -38,7 +38,7 @@ fun WeatherCurrentScreen() {
 
         Image(painter = painterResource(id = weather.resourceId),
             contentDescription = weather.weatherType,
-            modifier = Modifier.size(100.dp))
+            modifier = Modifier.size(200.dp))
 
         Spacer(modifier = Modifier.height(20.dp))
 

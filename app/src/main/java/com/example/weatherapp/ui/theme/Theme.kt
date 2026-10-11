@@ -12,15 +12,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = NightPrimary,
+    onPrimary = NightOnPrimary,
+    secondary = NightSecondary,
+    background = NightBackground,
+    onBackground = NightText,
+    surface = NightSurface,
+    onSurface = NightText,
+    outline = NightOutline,
+    surfaceContainer = NightSurface,
+    surfaceContainerLow = NightBackground,
+    secondaryContainer = NightSecondaryContainer,
+    onSecondaryContainer = NightText
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = DayPrimary,
+    onPrimary = DayOnPrimary,
+    secondary = DaySecondary,
+    background = DayBackground,
+    onBackground = DayText,
+    surface = DaySurface,
+    onSurface = DayText,
+    outline = DayOutline,
+    surfaceContainer = DaySurface,
+    surfaceContainerLow = DayBackground,
+    secondaryContainer = DaySecondaryContainer,
+    onSecondaryContainer = DayText
+
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -37,7 +56,7 @@ private val LightColorScheme = lightColorScheme(
 fun WeatherAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,  //Don't want dynamic colour here
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
