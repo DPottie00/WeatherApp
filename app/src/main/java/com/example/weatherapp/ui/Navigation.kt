@@ -2,20 +2,19 @@ package com.example.weatherapp.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -68,7 +67,7 @@ fun Navigation(
             NavigationBar(windowInsets = NavigationBarDefaults.windowInsets)
             {
                 NavigationBarItem(
-                    icon = { Icon(imageVector = Icons.Default.Search, contentDescription = "Search") },
+                    icon = { Icon(imageVector = Icons.Default.WbSunny, contentDescription = "Search") },
                     label = { Text("Weather Now") },
                     selected = selectedIndex == 0,
                     onClick = {
@@ -83,7 +82,7 @@ fun Navigation(
                     }
                 )
                 NavigationBarItem(
-                    icon = { Icon(imageVector = Icons.Default.Search, contentDescription = "Search") },
+                    icon = { Icon(imageVector = Icons.Default.CalendarToday, contentDescription = "Search") },
                     label = { Text("Daily Forecast") },
                     selected = selectedIndex == 1,
                     onClick = {
