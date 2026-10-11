@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var isDarkMode = remember { mutableStateOf(false) }
+            val isDarkMode = remember { mutableStateOf(false) }
 
             WeatherAppTheme(darkTheme = isDarkMode.value) {
                 Navigation(
