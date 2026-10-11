@@ -2,9 +2,12 @@ package com.example.weatherapp.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
@@ -28,7 +31,10 @@ import com.example.weatherapp.ui.screens.WeatherDailyScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Navigation(){
+fun Navigation(
+    darkMode: Boolean,
+    onToggleTheme: () -> Unit  // function type
+){
 
     val navController = rememberNavController()
     var selectedIndex by remember { mutableIntStateOf(0) } // default set to 0
@@ -39,6 +45,22 @@ fun Navigation(){
             TopAppBar(
                 title = {
                     Text("Halifax, Nova Scotia")
+                },
+                actions = {
+                    IconButton(onClick = onToggleTheme) {
+                        Icon(
+                            imageVector = if (darkMode) {
+                                Icons.Default.LightMode
+                            } else {
+                                Icons.Default.DarkMode
+                            },
+                            contentDescription = if (darkMode) {
+                                "Switch to Light Mode"
+                            } else {
+                                "Switch to Dark Mode"
+                            }
+                        )
+                    }
                 }
             )
         },
