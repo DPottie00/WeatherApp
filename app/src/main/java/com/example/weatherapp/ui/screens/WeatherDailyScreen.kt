@@ -71,7 +71,8 @@ fun WeatherDailyScreen() {
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
         itemsIndexed(dailyWeather) { index, weather ->
@@ -103,13 +104,15 @@ fun WeatherDailyScreen() {
                     ForecastDetails(
                         weather = weather,
                         dateLabel = LocalDate.now().plusDays(index.toLong()).format(formatter),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        reverse = false
                     )
                 } else {
                     ForecastDetails(
                         weather = weather,
                         dateLabel = LocalDate.now().plusDays(index.toLong()).format(formatter),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        reverse = true
                     )
                     Box(
                         modifier = Modifier
@@ -136,9 +139,10 @@ fun WeatherDailyScreen() {
 private fun ForecastDetails(
     weather: Forecast,
     dateLabel: String,
-    modifier: Modifier = Modifier //Deafults to "nothing" but can be passed modifiers (I needed to do this to get weight on the first column,
+    modifier: Modifier = Modifier, //Deafults to "nothing" but can be passed modifiers (I needed to do this to get weight on the first column,
                                   //because it wouldn't be seen as a "child" element, as it's the most top level part of this composable, and weight can only be
                                   //added to "child" elements
+    reverse: Boolean //To decide arrangement
 ) {
     Column(
         modifier = modifier
@@ -147,7 +151,12 @@ private fun ForecastDetails(
                 shape = RoundedCornerShape(22.dp)
             )
             .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(5.dp)
+        verticalArrangement = Arrangement.spacedBy(5.dp),
+        horizontalAlignment = if (reverse) {
+            Alignment.Start
+        } else {
+            Alignment.End
+        }
     ) {
         Text(
             text = dateLabel,
@@ -183,6 +192,14 @@ private fun ForecastDetails(
         ) {
             Text(
                 text = "Precipitation: ${weather.precipitationChance}%",
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = if (weather.weatherType == "Snow") {
+                    "Amount: ${weather.precipitationAmount}cm"
+                } else {
+                    "Amount: ${weather.precipitationAmount}mm"
+                },
                 style = MaterialTheme.typography.bodySmall
             )
         }
